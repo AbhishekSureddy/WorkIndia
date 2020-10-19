@@ -59,7 +59,7 @@ class userReg(Resource):
         data = request.get_json()
         password = data['password']
         agent_id = data['agent_id']
-        hash_pwd = hashit(password)
+        hash_pwd = hash(password)
         user= Test()
         user.user = agent_id
         user.hash_pwd = hash_pwd
@@ -74,13 +74,15 @@ class userLogin(Resource):
         data = request.get_json()
         password = data['password']
         agent_id = data['agent_id']
-        hash_pwd = hashit(password)
+        hash_pwd = hash(password)
         user= Test()
         user.user = agent_id
         user.hash_pwd = hash_pwd
         check=Test.query.filter_by(user=agent_id).first()
-        print (check.user, check.hash_pwd)
-        if(check.hash_pwd == user.hash_pwd):
+        print (check.user)
+        print(check.hash_pwd)
+        print(user.hash_pwd)
+        if(str(check.hash_pwd) == str(user.hash_pwd)):
             return {'status' : 'success','agent_id' : agent_id,'status_code' : 200 }
     
         return {'status' : 'failure','status_code' : 401 }
